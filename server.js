@@ -70,7 +70,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/registers", (req, res) => {
-  res.render("index");
+  res.render("registers");
 })
 
 app.listen(PORT, () => {
