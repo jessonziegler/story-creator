@@ -1,12 +1,20 @@
 // load .env data into process.env
 require("dotenv").config();
 
+const cookieSession = require('cookie-session')
 // Web server config
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+
+
+//cookie-session setting key
+app.use(cookieSession({
+  name: 'session',
+  keys: ['SomeKey']
+}))
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -52,6 +60,16 @@ app.use("/api/stories", storiesRoutes(db));
 
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+//set the cookie instead of building login feature
+app.get('/login/:id', (req, res) => {
+  // cookie-session
+  req.session.user_id = req.params.id;
+  // cookie-parser
+  res.cookie('user_id', req.params.id);
+  // send the user somewhere
+  res.redirect('/');
 });
 
 app.listen(PORT, () => {
