@@ -8,6 +8,7 @@ const sassMiddleware = require("./lib/sass-middleware");
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const bodyParser = require('body-parser');
 
 
 //cookie-session setting key
@@ -66,11 +67,13 @@ app.get("/", (req, res) => {
 app.get('/login/:id', (req, res) => {
   // cookie-session
   req.session.user_id = req.params.id;
-  // cookie-parser
-  res.cookie('user_id', req.params.id);
   // send the user somewhere
   res.redirect('/');
 });
+
+app.get('/checklogin', (req, res) => {
+  res.send(req.session.user_id);
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
