@@ -49,7 +49,7 @@ function createStoryElement(storyData) {
      <div class="story-header">
        <div>
 
-         <h6 class="username">${storyData.title}</h6>
+         <h3 class="story-title">${storyData.title}</h3>
 
 
      <p class="story-content">${escape(storyData.content)}</p>
@@ -61,7 +61,7 @@ function createStoryElement(storyData) {
          <i class="fas fa-flag"></i>
          <i class="fas fa-retweet"></i>
          <i class="fas fa-heart"></i>
-       </div>
+       </div> <br/>
      </footer>
 
    </article>
