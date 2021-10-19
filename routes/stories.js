@@ -16,6 +16,21 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+
+
+  // POST /products
+  router.post('/', (req, res) => {
+    const {title, content} = req.body;
+    db.createStoryElement(title, content)
+      .then(() => {
+        // res.redirect('/products');
+        // res.status(201).send();
+        res.json({ success: true });
+      });
+  });
+
+
+
   return router;
 };
 
