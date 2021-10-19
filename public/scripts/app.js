@@ -54,6 +54,10 @@ function createStoryElement(storyData) {
 
      <p class="story-content">${escape(storyData.content)}</p>
 
+     <button type="button" class="btn btn-primary">Edit</button>
+     <button type="button" class="btn btn-info">Contributions</button>
+     <button type="button" class="btn btn-danger">Delete</button>
+
      <hr class="solid">
 
      <footer class="story-footer">
@@ -61,6 +65,7 @@ function createStoryElement(storyData) {
          <i class="fas fa-flag"></i>
          <i class="fas fa-retweet"></i>
          <i class="fas fa-heart"></i>
+         <hr class="solid">
        </div> <br/>
      </footer>
 
@@ -70,19 +75,19 @@ function createStoryElement(storyData) {
 
  }
 
-$( document ).ready(function() {
-  console.log("Dom is ready")
-  loadStories();
+  $( document ).ready(function() {
+    console.log("Dom is ready")
+    loadStories();
 
 
    // to check if textarea is empty and no white space
 
 
-   $('.type-story').submit( function (event) {
+   $('.content').submit( function (event) {
     console.log("Submit Story Button clicked and handler for submit story button is called");
     event.preventDefault(); //cancel the submit action by calling .preventDefault()
 
-    if (!$.trim($(".type-story").val())) {
+    if (!$.trim($(".content").val())) {
       return $('#error').text('❗️Error: Please enter text');
     }
 
@@ -103,7 +108,7 @@ $( document ).ready(function() {
       data: storyText
     })
     .then(() => {
-      $('.type-story').val('');
+      $('.content').val('');
 
       loadTweets();
     })
