@@ -1,12 +1,20 @@
 // load .env data into process.env
 require("dotenv").config();
 
+const cookieSession = require('cookie-session')
 // Web server config
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+
+
+//cookie-session setting key
+app.use(cookieSession({
+  name: 'session',
+  keys: ['SomeKey']
+}))
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -37,41 +45,32 @@ app.use(express.static("public"));
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
-
-const loginRoutes = require("./routes/login");
-
-const registersRoutes = require("./routes/register");
-const { supportsColor } = require("supports-color");
-
+const storiesRoutes = require("./routes/stories");
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
-
-app.use("/api/login", loginRoutes(db));
-
-app.use("/api/registers", registersRoutes(db));
-
 // Note: mount other resources here, using the same pattern above
+app.use("/api/stories", storiesRoutes(db));
 
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-
-app.get("/login", (req, res) => {
-  res.render("index");
+//set the cookie instead of building login feature
+app.get('/login/:id', (req, res) => {
+  // cookie-session
+  req.session.user_id = req.params.id;
+  // cookie-parser
+  res.cookie('user_id', req.params.id);
+  // send the user somewhere
+  res.redirect('/');
 });
-
-app.get("/registers", (req, res) => {
-  res.render("index");
-})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
