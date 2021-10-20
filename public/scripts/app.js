@@ -13,17 +13,10 @@ const renderStories = function (stories) {
   for (const story of stories) {
     // calls createStoryElement for each story
     const $newStory = createStoryElement(story);
-    // Test / driver code (temporary)
-    // takes return value and appends it to the tweets container
+
+    // takes return value and appends it to the stories container
     $("#posted-stories-container").prepend($newStory); // to add it to the page so we can make sure it's got all the right elements, classes, etc.
   }
-};
-
-//Preventng cross-site scripting with an escape function
-const escape = function (str) {
-  let div = document.createElement("div");
-  div.appendChild(document.createTextNode(str));
-  return div.innerHTML;
 };
 
 function createStoryElement(storyData) {
@@ -32,7 +25,7 @@ function createStoryElement(storyData) {
      <div class="story-header">
        <div>
          <h3 class="story-title">${storyData.title}</h3>
-     <p class="story-content">${escape(storyData.content)}</p>
+     <p class="story-content">${storyData.content}</p>
      <div class = "contribution-content"> </div>
      <button type="button" class="btn btn-primary">Edit</button>
      <button type="button" id="contribution" class="btn btn-info">Contributions</button>
@@ -58,9 +51,9 @@ function createStoryElement(storyData) {
 $(document).ready(function () {
   console.log("Dom is ready");
   loadStories();
-  // to check if textarea is empty and no white space
 
-  const $newStories = $("#new-product-form");
+
+  const $newStories = $("#new-story-form");
   $newStories.submit(function (event) {
     console.log(
       "Submit Story Button clicked and handler for submit story button is called"
@@ -69,7 +62,7 @@ $(document).ready(function () {
     const data = $newStories.serialize();
     console.log(data);
 
-    if (!$.trim($(".content").val())) {
+    if (!$.trim($(".content").val()) || !$.trim($(".title").val())) {
       return $("#error").text("❗️Error: Please enter text");
     }
     $("#error").text("");
@@ -85,6 +78,7 @@ $(document).ready(function () {
       data,
     }).then(() => {
       console.log("so far, so good");
+      $(".title").val("");
       $(".content").val("");
       loadStories();
     });
