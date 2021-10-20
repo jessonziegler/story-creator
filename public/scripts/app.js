@@ -19,6 +19,15 @@ const renderStories = function (stories) {
   }
 };
 
+const loadContributions = function () {
+$.get("/api/contributions").then((data) => {
+console.log(data)
+    for (const contribution of data){
+      $("body").parent().find(`#contribution${contribution.stories_id}-content`).append(`<p>${contribution.contribution}</p><br>`);
+    }
+  });
+}
+
 function createStoryElement(storyData) {
   const markup = `
    <article class="story-data">
@@ -26,11 +35,12 @@ function createStoryElement(storyData) {
        <div>
          <h3 class="story-title">${storyData.title}</h3>
      <p class="story-content">${storyData.content}</p>
-     <div class = "contribution-content"> </div>
+     <div id = "contribution${storyData.id}-content"> </div>
      <button type="button" class="btn btn-primary">Edit</button>
      <button type="button" id="contribution" class="btn btn-info">Contributions</button>
 
      <form class="contribute-form">
+     <input type="hidden" id="storyid" name="storyid" value="${storyData.id}">
        <textarea name="submit" placeholder= "Share your imagination with us!"></textarea><br/>
        <input id="submit" class="btn btn-primary" type="submit" value="Submit">
 
@@ -92,6 +102,14 @@ $(document).ready(function () {
     event.preventDefault();
     const data = $(this).serialize().slice(7);
     console.log($(this));
-    $(this).parent().find(".contribution-content").append(`<p>${data}</p><br>`);
+    $.ajax({
+      type: "POST",
+      url: "/api/contributions",
+      data,
+    }).then(() => {
+      console.log("so far, so good");
+      loadContributions()})
+
+
   });
 });
