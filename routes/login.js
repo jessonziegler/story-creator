@@ -2,26 +2,37 @@ const express = require('express');
 const router  = express.Router();
 
 //login a user
-module.exports = (db) => {
 
-  router.get("/login", (req, res) => {
-   /* const user_email = req.body.email;
-    const password = req.body.password;
-    const values = [user_email, password];
-    console.log(values);
-    if (user_email === '' || password === '') {
-      res.send("Please enter your email and password!");
-    } else { */
-      db.query(`SELECT * FROM users;`)
-      .then(data => {
-        const users = data.rows;
-        res.json({ users });
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
+module.exports = (db) => {
+  router.get('/', (req, res) => {
+    // cookie-session
+    //req.session.user_id = req.params.id;
+    // send the user somewhere
+    res.render('login');
   });
+
+  router.post("/", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const values = [email, password];
+    console.log(values);
+    if (email === '' || password === '') {
+      res.send("Please enter your email and password!");
+    } else {
+      db.query(`SELECT * FROM users WHERE email = $1 AND password = $2`, values)
+        .then(data => {
+          console.log(data.rows);
+          res.cookie('users.id', data.rows[0]['id']);
+          console.log('letskettit')
+          //if(!res.cookie)
+          res.redirect('/');
+        })
+        .catch(err => {
+          console.log(err.message);
+          res.send("Invalid email or password");
+        });
+    }
+  });
+
   return router;
-  };
+};
