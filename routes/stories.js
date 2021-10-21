@@ -5,7 +5,7 @@ const router  = express.Router();
 module.exports = (db) => {
   router.get("/", (req, res) => {
     let query = `SELECT * FROM stories`;
-    db.query(query) //values
+    db.query(query)
       .then(data => {
         const stories = data.rows;
         res.json({ stories });
@@ -36,17 +36,14 @@ module.exports = (db) => {
 
   //edit
   router.post("/:id", (req, res) => {
-    console.log("console log from edit stories.js " + JSON.stringify(req.params));
+    // console.log("console log from edit stories.js " + JSON.stringify(req.params));
     const id = req.params
     const title = req.body.editTitle;
     const content = req.body.editContent;
     let query = `UPDATE stories SET title = '${title}', content = '${content}' WHERE id = ${id.id}`; //user_id hard-coded will get after login is set
-    console.log(query);
     db.query(query)
       .then(data => {
-        console.log(data);
         const stories = data.rows;
-        console.log(stories);
         res.json({ stories });
       })
       .catch(err => {
@@ -60,8 +57,6 @@ module.exports = (db) => {
   //delete
     router.delete("/:id", (req, res) => {
       const id = req.params
-      const title = req.body.editTitle;
-      const content = req.body.editContent;
       let query = `DELETE FROM stories WHERE id = ${id.id}`; //user_id hard-coded will get after login is set
       db.query(query)
         .then(data => {

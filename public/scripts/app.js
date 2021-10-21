@@ -54,8 +54,7 @@ function createStoryElement(storyData) {
      <hr class="solid">
      <footer class="story-footer">
        <div class ="story-icons">
-         <i class="fas fa-heart"></i>
-         <hr class="solid">
+
        </div> <br/>
      </footer>
    </article>
@@ -97,6 +96,8 @@ function createStoryElement(storyData) {
       <button type="button" class="btn btn-danger">Delete</button>`
     );
 
+    $storyElement.append($deleteButton);
+
     $deleteButton.click(function (event) {
       // const data = $deleteButton.serialize();
       $.ajax({
@@ -107,7 +108,7 @@ function createStoryElement(storyData) {
       });
     });
 
-    $storyElement.append($deleteButton);
+    // function contribute(contributions) {
 
     const $contributeForm = $(`
     <div class = "contribution-content"> </div>
@@ -121,24 +122,55 @@ function createStoryElement(storyData) {
 
     $storyElement.append($contributeForm);
 
+
+    // const loadContributions = function () {
+    //   $.get("/api/contributions").then((data) => {
+    //     console.log(data);
+    //     renderStories(data.contributions);
+    //   });
+    // };
+
+    // const renderStories = function (contributions) {
+    //   $("#posted-stories-container").empty();
+    //   for (const contribution of contributions) {
+    //     // calls createStoryElement for each story
+    //     const $newContribution = contribute(contribution);
+    //     // takes return value and appends it to the stories container
+    //     $("#posted-stories-container").prepend($newContribution); // to add it to the page so we can make sure it's got all the right elements, classes, etc.
+    //   }
+    // };
+
+
+
+      $contributeForm.submit(function (event) {
+      event.preventDefault();
+      const data = $contributeForm.serialize();
+      $.ajax({
+        type: "POST",
+        url: `/api/contributions/${storyData.id}`,
+        data,
+      }).then(() => {
+        $(".contributionContent").val("");
+        // loadContributions();
+      });
+    });
+
+
   return $storyElement;
 }
 
 
 
+  // const $contribution = $("#contribution");
 
 
-
-  const $contribution = $("#contribution");
-
-
-  $("body").on("submit", ".contribute-form", function (event) {
-    console.log("User wants to add to a story!");
-    event.preventDefault();
-    const data = $(this).serialize().slice(7);
-    console.log($(this));
-    $(this).parent().find(".contribution-content").append(`<p>${data}</p><br>`);
-  });
+  // $("body").on("submit", ".contribute-form", function (event) {
+  //   console.log("User wants to add to a story!");
+  //   event.preventDefault();
+  //   const data = $(this).serialize().slice(7);
+  //   console.log($(this));
+  //   $(this).parent().find(".contribution-content").append(`<p>${data}</p><br>`);
+  // });
 
 
 

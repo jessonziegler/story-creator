@@ -47,11 +47,14 @@
   }
   </style>
 <body style="color: whitesmoke">
-  </br><h1>Story-Creator</h1>
+  <%- include('partials/_header') %>
+
+</br><h1>Story-Creator</h1>
 
 
   <form id="new-story-form">
-    <label>Write Story</label><br/>
+    <br/>
+    <label>Write a Story</label><br/>
 
     <textarea class ="title" name="title" rows="1" cols="80" placeholder="Title"></textarea><br/>
     <textarea class ="content" name="content" rows="4" cols="100" placeholder="Write your story"></textarea>
@@ -69,6 +72,7 @@
 </br>
   <h4>Posted Stories</h4><br/>
   <div id="posted-stories-container"></div>
+
 
 </body>
 </html>
