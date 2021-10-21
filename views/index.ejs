@@ -43,11 +43,19 @@
 </head>
 
 <body>
-  </br><h1>Story-Creator</h1>
+
+  <div class="topnav">
+
+    <a class="active" href="http://localhost:8080/"></br><h1>Story-Creator</h1></a>
+    <a href="http://localhost:8080/api/stories">My Stories</a>
+    <a href="http://localhost:8080/api/contributions">My Contributions</a>
+
+  </div>
 
 
   <form id="new-story-form">
-    <label>Write Story</label><br/>
+    <br/>
+    <label>Write a Story</label><br/>
 
     <textarea class ="title" name="title" rows="1" cols="80" placeholder="Title"></textarea><br/>
     <textarea class ="content" name="content" rows="4" cols="100" placeholder="Write your story"></textarea>
@@ -65,6 +73,7 @@
 </br>
   <h4>Posted Stories</h4><br/>
   <div id="posted-stories-container"></div>
+
 
 </body>
 </html>
