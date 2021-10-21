@@ -5,15 +5,16 @@ $(document).ready(function () {
 
 const loadStories = function () {
   $.get("/api/stories").then((data) => {
-    renderStories(data.stories);
+    console.log(data);
+    renderStories(data.stories, data.contributions);
   });
 };
 
-const renderStories = function (stories) {
+const renderStories = function (stories, contributions) {
   $("#posted-stories-container").empty();
   for (const story of stories) {
     // calls createStoryElement for each story
-    const $newStory = createStoryElement(story);
+    const $newStory = createStoryElement(story, contributions);
     // takes return value and appends it to the stories container
     $("#posted-stories-container").prepend($newStory); // to add it to the page so we can make sure it's got all the right elements, classes, etc.
   }
@@ -44,7 +45,10 @@ $newStories.submit(function (event) {
   });
 });
 
-function createStoryElement(storyData) {
+function createStoryElement(storyData, contributions) {
+
+  const filtered = contributions.filter((contribution)=> contribution.stories_id === storyData.id)
+  console.log(filtered)
   const $storyElement = $(`
    <article class="story-data">
      <div class="story-header">
@@ -69,8 +73,14 @@ function createStoryElement(storyData) {
     <input id="editSubmit" class="btn btn-secondary" type="submit" value="Edit">
     </form>
     `);
+    const $newDiv = $(`<div>`)
+    for (let filter of filtered){
+      const content = $(`<h2>${filter.contribution}</h2>`)
+    $newDiv.append(content)
+    }
 
-    $storyElement.append($editForm);
+
+    $storyElement.append($editForm, $newDiv);
 
     $editForm.submit(function (event) {
       event.preventDefault(); //cancel the submit action by calling .preventDefault()
@@ -151,7 +161,7 @@ function createStoryElement(storyData) {
         data,
       }).then(() => {
         $(".contributionContent").val("");
-        // loadContributions();
+        loadStories();
       });
     });
 

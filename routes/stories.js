@@ -4,11 +4,18 @@ const router  = express.Router();
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    let query = `SELECT * FROM stories`;
-    db.query(query)
+    let storyquery = `SELECT * FROM stories`;
+    const contributionquery = `SELECT * FROM contributions`;
+
+    const myStory = db.query(storyquery)
+    const mycontribution = db.query(contributionquery)
+    const promises = [myStory, mycontribution]
+    Promise.all(promises)
+
       .then(data => {
-        const stories = data.rows;
-        res.json({ stories });
+        const stories = data[0].rows;
+        const contributions = data[1].rows
+        res.json({ stories, contributions });
       })
       .catch(err => {
         res
