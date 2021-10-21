@@ -40,10 +40,6 @@ module.exports = (db) => {
     const id = req.params
     const title = req.body.editTitle;
     const content = req.body.editContent;
-    //const user_id = req.params; use this only after connecting logins to database.
-    console.log(id.id);
-    console.log(title);
-    console.log(content);
     let query = `UPDATE stories SET title = '${title}', content = '${content}' WHERE id = ${id.id}`; //user_id hard-coded will get after login is set
     console.log(query);
     db.query(query)
@@ -58,9 +54,27 @@ module.exports = (db) => {
           .status(500)
           .json({ error: err.message });
       });
-
-
   });
+
+
+  //delete
+    router.delete("/:id", (req, res) => {
+      const id = req.params
+      const title = req.body.editTitle;
+      const content = req.body.editContent;
+      let query = `DELETE FROM stories WHERE id = ${id.id}`; //user_id hard-coded will get after login is set
+      db.query(query)
+        .then(data => {
+          const stories = data.rows;
+          res.json({ stories });
+        })
+        .catch(err => {
+          res
+            .status(500)
+            .json({ error: err.message });
+        });
+    });
+
 
   return router;
 };
