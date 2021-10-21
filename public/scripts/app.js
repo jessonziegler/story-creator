@@ -1,8 +1,10 @@
 // Client facing scripts here
 
+$(document).ready(function () {
+  console.log("Dom is ready");
+
 const loadStories = function () {
   $.get("/api/stories").then((data) => {
-    console.log(data.stories);
     renderStories(data.stories);
   });
 };
@@ -18,6 +20,35 @@ const renderStories = function (stories) {
   }
 };
 
+loadStories();
+
+
+const $newStories = $("#new-story-form");
+$newStories.submit(function (event) {
+  console.log(
+    "Submit Story Button clicked and handler for submit story button is called"
+  );
+  event.preventDefault(); //cancel the submit action by calling .preventDefault()
+  const data = $newStories.serialize();
+  console.log(data);
+
+  if (!$.trim($(".content").val()) || !$.trim($(".title").val())) {
+    return $("#error").text("❗️Error: Please enter text");
+  }
+  $("#error").text("");
+
+  $.ajax({
+    type: "POST",
+    url: "/api/stories",
+    data,
+  }).then(() => {
+    console.log("so far, so good");
+    $(".title").val("");
+    $(".content").val("");
+    loadStories();
+  });
+});
+
 function createStoryElement(storyData) {
   const $storyElement = $(`
    <article class="story-data">
@@ -25,7 +56,6 @@ function createStoryElement(storyData) {
        <div>
          <h3 class="story-title">Story ${storyData.id}. ${storyData.title} </h3>
      <p class="story-content">${storyData.content}</p>
-     <button type="button" class="btn btn-danger">Delete</button>
      <hr class="solid">
      <footer class="story-footer">
        <div class ="story-icons">
@@ -36,13 +66,10 @@ function createStoryElement(storyData) {
    </article>
      `);
 
-
-
     const $editForm = $(`
-
     <form class="edit">
-    <textarea class ="editTitle" name="editTitle" rows="1" cols="80" value="${storyData.title}"></textarea><br/>
-    <textarea class ="editContent" name="editContent" rows="4" cols="100" value="${storyData.content}"></textarea>
+    <textarea class ="editTitle" name="editTitle" rows="1" cols="80">${storyData.title}</textarea><br/>
+    <textarea class ="editContent" name="editContent" rows="4" cols="100">${storyData.content}</textarea>
     <div class="error"> <h5><p id="error"></p></h5></div>
     <br/>
     <input id="editSubmit" class="btn btn-primary" type="submit" value="Edit">
@@ -55,12 +82,21 @@ function createStoryElement(storyData) {
       event.preventDefault(); //cancel the submit action by calling .preventDefault()
       const data = $editForm.serialize();
       console.log("edit data: " + data);
-
-      $.post(`api/stories/${storyData.id}`, data)
-        .then(() => {
-          loadStories();
-        });
+      console.log("app.js storydata.id: " +storyData.id)
+      $.ajax({
+        type: "POST",
+        url: `/api/stories/${storyData.id}`,
+        data,
+      }).then(() => {
+        console.log("hello from edit post");
+        $(".title").val("");
+        $(".content").val("");
+        loadStories();
+      });
     });
+
+
+
 
     const $contributeForm = $(`
     <div class = "contribution-content"> </div>
@@ -77,36 +113,8 @@ function createStoryElement(storyData) {
   return $storyElement;
 }
 
-$(document).ready(function () {
-  console.log("Dom is ready");
-  loadStories();
 
 
-  const $newStories = $("#new-story-form");
-  $newStories.submit(function (event) {
-    console.log(
-      "Submit Story Button clicked and handler for submit story button is called"
-    );
-    event.preventDefault(); //cancel the submit action by calling .preventDefault()
-    const data = $newStories.serialize();
-    console.log(data);
-
-    if (!$.trim($(".content").val()) || !$.trim($(".title").val())) {
-      return $("#error").text("❗️Error: Please enter text");
-    }
-    $("#error").text("");
-
-    $.ajax({
-      type: "POST",
-      url: "/api/stories",
-      data,
-    }).then(() => {
-      console.log("so far, so good");
-      $(".title").val("");
-      $(".content").val("");
-      loadStories();
-    });
-  });
 
 
 

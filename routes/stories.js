@@ -18,12 +18,9 @@ module.exports = (db) => {
   });
 
   router.post("/", (req, res) => {
-    console.log("console log from stories.js " + JSON.stringify(req.params));
     const title = req.body.title;
     const content = req.body.content;
     //const user_id = req.params; use this only after connecting logins to database.
-    console.log(title);
-    console.log(content);
     let query = `INSERT INTO stories (title, content, user_id) VALUES ('${title}', '${content}',1)`; //user_id hard-coded will get after login is set
     db.query(query)
       .then(data => {
@@ -38,18 +35,22 @@ module.exports = (db) => {
   });
 
   //edit
-  router.post("/:story_id", (req, res) => {
-    console.log("console log from stories.js " + JSON.stringify(req.params));
-
-    const title = req.body.title;
-    const content = req.body.content;
+  router.post("/:id", (req, res) => {
+    console.log("console log from edit stories.js " + JSON.stringify(req.params));
+    const id = req.params
+    const title = req.body.editTitle;
+    const content = req.body.editContent;
     //const user_id = req.params; use this only after connecting logins to database.
+    console.log(id.id);
     console.log(title);
     console.log(content);
-    let query = `INSERT INTO stories (title, content, user_id) VALUES ('${title}', '${content}',1)`; //user_id hard-coded will get after login is set
+    let query = `UPDATE stories SET title = '${title}', content = '${content}' WHERE id = ${id.id}`; //user_id hard-coded will get after login is set
+    console.log(query);
     db.query(query)
       .then(data => {
+        console.log(data);
         const stories = data.rows;
+        console.log(stories);
         res.json({ stories });
       })
       .catch(err => {
@@ -57,11 +58,9 @@ module.exports = (db) => {
           .status(500)
           .json({ error: err.message });
       });
+
+
   });
-
-
-
-
 
   return router;
 };

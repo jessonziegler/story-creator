@@ -17,7 +17,6 @@ module.exports = (db) => {
       });
   });
 
-
 router.post("/", (req, res) => {
   console.log("console log from stories.js " + JSON.stringify(req.body));
   const id = req.body[""]
