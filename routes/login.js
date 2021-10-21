@@ -5,10 +5,14 @@ const router  = express.Router();
 
 module.exports = (db) => {
   router.get('/', (req, res) => {
+    console.log('1st one good')
+  console.log('Cookies: ', req.cookies['users.id'])
+  const user_id = req.cookies['users.id'];
+  const templateVars = {user_id};
     // cookie-session
     //req.session.user_id = req.params.id;
     // send the user somewhere
-    res.render('login');
+    res.render('login', templateVars);
   });
 
   router.post("/", (req, res) => {

@@ -22,9 +22,9 @@ module.exports = (db) => {
 
 
   router.get("/:id", (req, res) => {
-    const id = req.params
+    const stories_id = req.params
     let query = `SELECT * FROM contributions`;
-    // let query = `SELECT contribution FROM contributions WHERE stories_id = ${id.id}`;
+    // let query = `SELECT contribution FROM contributions WHERE stories_id = ${stories_id.id}`;
     db.query(query) //values
       .then(data => {
         const contributions = data.rows;

@@ -70,8 +70,6 @@ app.use("/logout", logoutRoutes());
 // Separate them into separate routes files (see above).
 
 app.get("/", (req, res) => {
-  console.log('1st one good')
-  console.log('Cookies: ', req.cookies['users.id'])
   const user_id = req.cookies['users.id'];
   console.log(user_id);
   console.log(typeof user_id);
@@ -90,9 +88,11 @@ app.get("/", (req, res) => {
   }
 });
 
+/*
 app.get('/checklogin', (req, res) => {
+  const user_id = req.cookies['users.id'];
   res.send(req.session.user_id);
-})
+}) */
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
