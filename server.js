@@ -9,6 +9,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 
 //cookie-session setting key
@@ -41,6 +42,7 @@ app.use(
 );
 
 app.use(express.static("public"));
+app.use(cookieParser());
 
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
@@ -48,6 +50,9 @@ const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
 const storiesRoutes = require("./routes/stories");
 const contributionsRoutes = require("./routes/contributions");
+const loginRoutes = require("./routes/login");
+const logoutRoutes = require("./routes/logout");
+
 
 
 // Mount all resource routes
@@ -57,21 +62,32 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Note: mount other resources here, using the same pattern above
 app.use("/api/stories", storiesRoutes(db));
 app.use("/api/contributions", contributionsRoutes(db));
+app.use("/api/login", loginRoutes(db));
+app.use("/logout", logoutRoutes());
 
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
 app.get("/", (req, res) => {
-  res.render("index");
-});
+  console.log('1st one good')
+  console.log('Cookies: ', req.cookies['users.id'])
+  const user_id = req.cookies['users.id'];
+  console.log(user_id);
+  console.log(typeof user_id);
+  tempVar = {user_id};
 
-//set the cookie instead of building login feature
-app.get('/login/:id', (req, res) => {
-  // cookie-session
-  req.session.user_id = req.params.id;
-  // send the user somewhere
-  res.redirect('/');
+  if (user_id !== 'undefined' && user_id !== undefined) {
+    const values = [user_id];
+    db.query(`SELECT * FROM USERS WHERE id = $1`, values)
+    .then((data)=>{
+      const user_name = data.rows[0]['users.name'];
+      tempVar.user_name = user_name;
+    res.render("index", tempVar);
+    });
+  } else {
+    res.redirect('/api/login');
+  }
 });
 
 app.get('/checklogin', (req, res) => {
