@@ -67,7 +67,7 @@ function createStoryElement(storyData) {
     <textarea class ="editContent" name="editContent" rows="4" cols="100">${storyData.content}</textarea>
     <h5><p id="errorEdit"></p></h5>
     <br/>
-    <input id="editSubmit" class="btn btn-primary" type="submit" value="Edit">
+    <input id="editSubmit" class="btn btn-secondary" type="submit" value="Edit">
     </form>
     `);
 
@@ -111,11 +111,11 @@ function createStoryElement(storyData) {
 
     const $contributeForm = $(`
     <div class = "contribution-content"> </div>
-    <button type="button" id="contribution" class="btn btn-info">Contributions</button>
+    <button type="button" id="contribution" class="btn btn-warning">Contributions</button>
 
     <form class="contribute-form">
       <textarea class="contribution-content" name="submit" placeholder= "Share your imagination with us!"></textarea><br/>
-      <input id="submit" class="btn btn-primary" type="submit" value="Submit">
+      <input id="submit" class="btn btn-dark" type="submit" value="Submit">
       </form>
     `);
 
