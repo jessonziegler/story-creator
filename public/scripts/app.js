@@ -66,7 +66,7 @@ function createStoryElement(storyData) {
     <textarea class ="editContent" name="editContent" rows="4" cols="100">${storyData.content}</textarea>
     <h5><p id="errorEdit"></p></h5>
     <br/>
-    <input id="editSubmit" class="btn btn-primary" type="submit" value="Edit">
+    <input id="editSubmit" class="btn btn-secondary" type="submit" value="Edit">
     </form>
     `);
 
@@ -110,21 +110,15 @@ function createStoryElement(storyData) {
 
     // function contribute(contributions) {
 
-      const $contributeForm = $(`
-      <div class = "contribution-content"> </div>
+    const $contributeForm = $(`
+    <div class = "contribution-content"> </div>
+    <button type="button" id="contribution" class="btn btn-warning">Contributions</button>
 
-      <button type="button" id="contribution" class="btn btn-info">Contributions</button>
-      <form class="contribute-form">
-        <textarea class="contributionContent" name="submit" placeholder= "Share your imagination with us!"></textarea><br/>
-        <input id="submit" class="btn btn-primary" type="submit" value="Contribute">
-      </form><br/>
-        <hr class="solid">
-        </br>
-        <hr class="solid"> <br/>
-      `);
-      // return $contributeForm;
-    // }
-
+    <form class="contribute-form">
+      <textarea class="contribution-content" name="submit" placeholder= "Share your imagination with us!"></textarea><br/>
+      <input id="submit" class="btn btn-dark" type="submit" value="Submit">
+      </form>
+    `);
 
     $storyElement.append($contributeForm);
 
