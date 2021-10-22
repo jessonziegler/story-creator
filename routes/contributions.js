@@ -4,13 +4,13 @@ const router  = express.Router();
 module.exports = (db) => {
 
   router.get("/", (req, res) => {
-    const id = req.params
-    let query = `SELECT * FROM contributions`;
-    // let query = `SELECT contribution FROM contributions WHERE stories_id = ${id.id}`;
-    db.query(query) //values
+    const user_id = req.cookies['users.id'];
+    const userId = [user_id];
+    let query = (`SELECT contribution FROM contributions WHERE stories_id = stories.${userId}`);
+    db.query(query)
       .then(data => {
         const contributions = data.rows;
-        res.json(contributions);
+        res.json(contributions, userId);
       })
       .catch(err => {
         res
@@ -56,7 +56,21 @@ module.exports = (db) => {
     });
 });
 
-
+router.delete("/:id", (req, res) => {
+  const story_id = req.cookies['users.id'];
+  const userId = story_id;
+  let query = `DELETE FROM stories WHERE stories_id = ${userId.id}`;
+  db.query(query)
+    .then(data => {
+      const contributions = data.rows;
+      res.json(contributions);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ error: err.message });
+    });
+});
 
 return router;
 };

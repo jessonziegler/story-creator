@@ -6,11 +6,11 @@ $(document).ready(function () {
 const loadStories = function () {
   $.get("/api/stories").then((data) => {
     console.log(data);
-    renderStories(data.stories, data.contributions);
+    renderStories(data.stories, data.contributions, data.user_id);
   });
 };
 
-const renderStories = function (stories, contributions) {
+const renderStories = function (stories, contributions, userId) {
   $("#posted-stories-container").empty();
   for (const story of stories) {
     // calls createStoryElement for each story
@@ -45,7 +45,7 @@ $newStories.submit(function (event) {
   });
 });
 
-function createStoryElement(storyData, contributions) {
+function createStoryElement(storyData, contributions, userId) {
 
   const filtered = contributions.filter((contribution)=> contribution.stories_id === storyData.id)
   console.log(filtered)
@@ -87,11 +87,30 @@ function createStoryElement(storyData, contributions) {
     })
     $editForm.hide();
 
-
     const $newDiv = $(`<div>`)
-    for (let filter of filtered){
-      const content = $(`<h6>${filter.contribution}</h6>`)
+    for (let filter of filtered) {
+      let content = $(`<h2>${filter.contribution}</h2>`)
+      console.log('1st', userId);
+      console.log('2nd', storyData.user_id);
+      if (userId == storyData.user_id) {
+        console.log(`${filter.contribution}`);
+        content = $(`
+        <h2>${filter.contribution}</h2>
+        <button id= "deleteContribution" type="button" class="btn btn-danger">Time To Go!</button>
+        `);
+      } else {
+        content = content;
+      };
     $newDiv.append(content)
+$(`#deleteContribution`).click(function (event) {
+      $.ajax({
+        type: "DELETE",
+        url: `/api/contributions/${userId}`,
+      }).then(() => {
+        console.log(`We need this mf ${userId}`);
+        loadStories();
+      });
+    });
     }
 
 
