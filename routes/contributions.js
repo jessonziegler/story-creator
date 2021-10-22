@@ -40,18 +40,13 @@ module.exports = (db) => {
 
  //contributions
  router.post("/:id", (req, res) => {
-  console.log("console log from contributions.js " + JSON.stringify(req.body));
   const story_id = req.params
-  console.log(story_id.id);
   const content = req.body; //passing an object
-  console.log(content.submit);
   let query = `INSERT INTO contributions (contribution, stories_id) VALUES ('${content.submit}', ${story_id.id})`;
-  console.log(query);
+
   db.query(query)
     .then(data => {
-      console.log(data);
       const stories = data.rows;
-      console.log(stories);
       res.json({ stories });
     })
     .catch(err => {
