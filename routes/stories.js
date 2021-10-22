@@ -27,7 +27,7 @@ module.exports = (db) => {
   router.post("/", (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
-    //const user_id = req.params; use this only after connecting logins to database.
+
     let query = `INSERT INTO stories (title, content, user_id) VALUES ('${title}', '${content}',1)`; //user_id hard-coded will get after login is set
     db.query(query)
       .then(data => {
@@ -64,7 +64,7 @@ module.exports = (db) => {
   //delete
     router.delete("/:id", (req, res) => {
       const id = req.params
-      let query = `DELETE FROM stories WHERE id = ${id.id}`; //user_id hard-coded will get after login is set
+      let query = `DELETE FROM stories WHERE id = ${id.id}`;
       db.query(query)
         .then(data => {
           const stories = data.rows;
