@@ -64,7 +64,7 @@ function createStoryElement(storyData, contributions) {
      `);
 
      const $editButton = $(`
-      <button id = editButton type="editButton" class="btn btn-primary editButton">Edit</button>
+      <button id = editButton type="editButton" class="btn btn-dark btn-normal editButton">Edit</button>
      `);
 
      $storyElement.append($editButton);
