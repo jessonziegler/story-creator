@@ -75,7 +75,7 @@ function createStoryElement(storyData, contributions) {
     `);
     const $newDiv = $(`<div>`)
     for (let filter of filtered){
-      const content = $(`<h2>${filter.contribution}</h2>`)
+      const content = $(`<h6>${filter.contribution}</h6>`)
     $newDiv.append(content)
     }
 
